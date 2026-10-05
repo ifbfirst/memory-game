@@ -69,7 +69,7 @@ function startGame () {
 }
 
 function showLeaders () {
-  alert('leaders')
+
 }
 
 function showCell (e: any){
