@@ -11,20 +11,18 @@ const dialog = document.createElement('dialog');
 body?.appendChild(dialog);
 header.classList.add('header');
 main.classList.add('main');
-startGameBtn.textContent = 'Старт игры';
-leadersBtn.textContent = 'Лидеры';
+startGameBtn.textContent = 'Новая игра';
+leadersBtn.textContent = 'Таблица лидеров';
 startGameBtn?.addEventListener('click', startGame);
 leadersBtn?.addEventListener('click', showLeaders);
-// body?.addEventListener('click', ()=>dialog.close());
 body?.appendChild(header);
 body?.appendChild(main);
 header.appendChild(startGameBtn);
 header.appendChild(leadersBtn);
 header.appendChild(matchedPairsDiv);
 header.appendChild(movesCountDiv);
-matchedPairsDiv.textContent ='Найденных пар — 0 из 8';
-movesCountDiv.textContent ='Счетчик ходов: 0';
 
+let results = JSON.parse(localStorage?.getItem('results') || '[]');
 let movesCount = 0;
 let movesCountPair = 0;
 let matchedPairs = 0;
@@ -54,10 +52,13 @@ let isLockBoard = false;
 
 
 function startGame () {
-  movesCount = 0;
   openedCards = [];
   isLockBoard = false;
-
+  matchedPairs=0;
+  movesCount =0;
+  movesCountPair =0;
+matchedPairsDiv.textContent ='Найденных пар — 0 из 8';
+movesCountDiv.textContent ='Счетчик ходов: 0';
   const cards =[1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8];
   cards.sort(() => Math.random() - 0.5);
 
@@ -81,8 +82,38 @@ function startGame () {
   }
 }
 
-function showLeaders () {
+function showLeaders() {
+  while (dialog.firstChild) {
+    dialog.removeChild(dialog.firstChild);
+  };
+  dialog.showModal();
 
+
+  const title = document.createElement('h3');
+  title.textContent = 'Таблица лидеров:';
+  dialog.appendChild(title);
+
+  if (results.length === 0) {
+    const p = document.createElement('p');
+    p.textContent = 'Пока нет результатов';
+    dialog.appendChild(p);
+  } else {
+    const list = document.createElement('ol');
+    results.forEach((res: any) => {
+      const li = document.createElement('li');
+ 
+      li.textContent = `Ходов: ${res.moves} (${res.date})`;
+      list.appendChild(li);
+    });
+    dialog.appendChild(list);
+  }
+
+  const closeBtn = document.createElement('button');
+  closeBtn.textContent = 'Закрыть';
+  closeBtn.addEventListener('click', () => {
+    dialog.close(); 
+  });
+  dialog.appendChild(closeBtn);
 }
 
 function showCell (e: any){
@@ -145,10 +176,33 @@ function checkCards (){
   }
 
   if(matchedPairs === 8){
+    saveGame();
+    while (dialog.firstChild) {
+      dialog.removeChild(dialog.firstChild);
+    };
     dialog.showModal();
-    dialog.textContent = 'Вы выиграли';
+  
+    const winText = document.createElement('p');
+    winText.textContent = `Вы выиграли! Ходов сделано: ${movesCountPair}`;
+    dialog.appendChild(winText);
+    const closeBtn = document.createElement('button');
+  closeBtn.textContent = 'Закрыть';
+  closeBtn.addEventListener('click', () => {
+    dialog.close(); 
+  });
+  dialog.appendChild(closeBtn);
   
   }
 }
+
+
+function saveGame(){
+  const formattedDate = new Date().toLocaleDateString('ru-RU');
+  results.push({ date: formattedDate, moves: movesCountPair });
+  results.sort((a: any, b: any) => a.moves - b.moves);
+  results = results.slice(0, 10);
+  localStorage.setItem('results', JSON.stringify(results));
+}
+
 
 startGame ();
