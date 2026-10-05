@@ -1,10 +1,15 @@
 import './style.css'
 
+const typeOptions = ['halloween','weather', 'flags', 'body'];
+
+
+
 const body = document.querySelector('body');
 const header = document.createElement('header');
 const main = document.createElement('main');
 const startGameBtn = document.createElement('button');
 const leadersBtn = document.createElement('button');
+const typeSelect = document.createElement('select');
 const matchedPairsDiv = document.createElement('div');
 const movesCountDiv = document.createElement('div');
 const dialog = document.createElement('dialog');
@@ -15,10 +20,13 @@ startGameBtn.textContent = 'Новая игра';
 leadersBtn.textContent = 'Таблица лидеров';
 startGameBtn?.addEventListener('click', startGame);
 leadersBtn?.addEventListener('click', showLeaders);
+typeSelect.addEventListener('change', startGame);
+typeSelect.id ='type';
 body?.appendChild(header);
 body?.appendChild(main);
 header.appendChild(startGameBtn);
 header.appendChild(leadersBtn);
+header.appendChild(typeSelect);
 header.appendChild(matchedPairsDiv);
 header.appendChild(movesCountDiv);
 
@@ -44,7 +52,15 @@ for(let i=0;i<4;i++){
 
 }
 
+for(let x=0;x<typeOptions.length;x++){
+  const option = document.createElement('option');
+  option.textContent =`${typeOptions[x]}`;
+   option.value =`${typeOptions[x]}`;
+  typeSelect.appendChild(option);
+  
+  
 
+}
 
 let openedCards: HTMLElement[] = []; 
 let isLockBoard = false; 
@@ -72,7 +88,7 @@ movesCountDiv.textContent ='Счетчик ходов: 0';
 
     const img = document.createElement('img');
     img.className = 'img hidden'; 
-    img.src = `/assets/${cards[i]}.png`;
+    img.src = `/assets/${typeSelect.value}/${cards[i]}.png`;
 
     if (cell.firstChild) {
       cell.removeChild(cell.firstChild);
@@ -117,22 +133,23 @@ function showLeaders() {
 }
 
 function showCell (e: any){
-  movesCount= movesCount+1;
- 
-if(movesCount%2===0){
-  movesCountPair+=1;
-
-  }
-  movesCountDiv.textContent = `Счетчик ходов: ${movesCountPair}`;
   if (isLockBoard) return; 
 
   const cell = e.target.closest('.cell');
   if (!cell) return;
 
   const img = cell.querySelector('img');
-  if (!img.classList.contains('hidden')) return;
+  if (!img.classList.contains('hidden')) return; 
 
-  if (openedCards.length < 2){
+  movesCount = movesCount + 1;
+ 
+  if (movesCount % 2 === 0) {
+    movesCountPair += 1;
+  }
+  movesCountDiv.textContent = `Счетчик ходов: ${movesCountPair}`;
+
+
+  if (openedCards.length < 2) {
     openedCards.push(cell);
     img.classList.remove("hidden");
   }
