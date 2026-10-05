@@ -2,20 +2,32 @@ import './style.css'
 
 const body = document.querySelector('body');
 const header = document.createElement('header');
-header.classList.add('header');
 const main = document.createElement('main');
-main.classList.add('main');
 const startGameBtn = document.createElement('button');
-startGameBtn.textContent = 'Старт игры';
 const leadersBtn = document.createElement('button');
+const matchedPairsDiv = document.createElement('div');
+const movesCountDiv = document.createElement('div');
+const dialog = document.createElement('dialog');
+body?.appendChild(dialog);
+header.classList.add('header');
+main.classList.add('main');
+startGameBtn.textContent = 'Старт игры';
 leadersBtn.textContent = 'Лидеры';
 startGameBtn?.addEventListener('click', startGame);
 leadersBtn?.addEventListener('click', showLeaders);
+// body?.addEventListener('click', ()=>dialog.close());
 body?.appendChild(header);
 body?.appendChild(main);
 header.appendChild(startGameBtn);
 header.appendChild(leadersBtn);
+header.appendChild(matchedPairsDiv);
+header.appendChild(movesCountDiv);
+matchedPairsDiv.textContent ='Найденных пар — 0 из 8';
+movesCountDiv.textContent ='Счетчик ходов: 0';
 
+let movesCount = 0;
+let movesCountPair = 0;
+let matchedPairs = 0;
 
 const gameContainer = document.createElement('div');
 main.appendChild(gameContainer);
@@ -42,6 +54,7 @@ let isLockBoard = false;
 
 
 function startGame () {
+  movesCount = 0;
   openedCards = [];
   isLockBoard = false;
 
@@ -73,6 +86,13 @@ function showLeaders () {
 }
 
 function showCell (e: any){
+  movesCount= movesCount+1;
+ 
+if(movesCount%2===0){
+  movesCountPair+=1;
+
+  }
+  movesCountDiv.textContent = `Счетчик ходов: ${movesCountPair}`;
   if (isLockBoard) return; 
 
   const cell = e.target.closest('.cell');
@@ -108,6 +128,8 @@ function checkCards (){
     const imgSecond = imgArr[1].src;
 
     if (imgFirst === imgSecond){
+      matchedPairs+=1;
+      matchedPairsDiv.textContent =`Найденных пар — ${matchedPairs} из 8`
       openedCards = []; 
     } else {
       isLockBoard = true;
@@ -122,11 +144,11 @@ function checkCards (){
     }
   }
 
-  const hiddenCars = document.getElementsByClassName('.hidden');
-  if(hiddenCars.length ===0){
-    const dialog = document.createElement('dialog');
-    body?.appendChild(dialog);
-    dialog.textContent = 'Вы выиграли'
+  if(matchedPairs === 8){
+    dialog.showModal();
+    dialog.textContent = 'Вы выиграли';
+  
   }
 }
 
+startGame ();
