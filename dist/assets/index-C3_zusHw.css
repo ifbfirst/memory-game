@@ -1,0 +1,1 @@
+.header,.main{justify-self:center;align-items:center;display:flex}.cell{cursor:pointer;border:1px solid gray;width:128px;height:128px;margin-top:3px}.row{gap:3px;display:flex}button{cursor:pointer}.img{opacity:1;visibility:visible;width:128px;height:128px;transition:opacity .3s}.hidden{opacity:0;visibility:hidden;transition:opacity .3s}
