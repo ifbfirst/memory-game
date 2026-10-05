@@ -72,7 +72,7 @@ movesCountDiv.textContent ='Счетчик ходов: 0';
 
     const img = document.createElement('img');
     img.className = 'img hidden'; 
-    img.src = `src/assets/${cards[i]}.png`;
+    img.src = `/assets/${cards[i]}.png`;
 
     if (cell.firstChild) {
       cell.removeChild(cell.firstChild);
