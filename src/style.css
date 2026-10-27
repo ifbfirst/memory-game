@@ -1,3 +1,4 @@
+/* Общие стили страницы */
 body {
   margin: 0;
   padding: 0;
@@ -6,7 +7,8 @@ body {
   color: #ffffff;
 }
 
-.header{
+/* Навигационная панель / Шапка */
+.header {
   display: flex;
   justify-content: center; 
   align-items: center;
@@ -15,14 +17,16 @@ body {
   background-color: #222; 
 }
 
+/* Главный контейнер игрового поля */
 .main {
   display: flex;
+  flex-direction: column; /* Выстраивает строки .row строго друг под другом */
   justify-content: center; 
   align-items: center;
   padding: 30px;
 }
 
-
+/* Кнопки "Новая игра" и "Таблица лидеров" */
 button {
   cursor: pointer;
   padding: 10px 20px;
@@ -44,7 +48,14 @@ button:active {
   transform: scale(0.98);
 }
 
+/* Строка игрового поля (содержит 4 карточки) */
+.row {
+  display: flex;
+  flex-direction: row; /* Выстраивает карточки горизонтально слева направо */
+  gap: 6px; 
+}
 
+/* Игровая карточка (ячейка) */
 .cell {
   background-color: #2c1a30; 
   border: 2px solid #4a2854; 
@@ -65,11 +76,7 @@ button:active {
   border-color: #ff7b00; 
 }
 
-.row {
-  display: flex;
-  gap: 6px; 
-}
-
+/* Картинка внутри карточки */
 .img {
   width: 100px; 
   height: 100px;
@@ -79,13 +86,14 @@ button:active {
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
+/* Скрытая картинка (рубашка карты) */
 .hidden {
   opacity: 0;
   visibility: hidden;
   transform: scale(0.8); 
 }
 
-
+/* Модальное окно (Dialog) */
 dialog {
   padding: 30px;
   border-radius: 12px;
@@ -96,7 +104,7 @@ dialog {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-
+/* Селектор выбора темы (Dropdown) */
 select {
   cursor: pointer;
   padding: 10px 35px 10px 15px;
@@ -107,10 +115,10 @@ select {
   background-color: #2c1a30; 
   color: white;
   outline: none;
-  
-
   appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://w3.org' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ff7b00' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  
+  /* Исправленный валидный SVG-код кастомной стрелочки */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ff7b00' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
   background-repeat: no-repeat;
   background-position: right 12px center;
   background-size: 16px;
@@ -122,11 +130,9 @@ select:hover {
   box-shadow: 0 0 10px rgba(255, 123, 0, 0.4);
 }
 
-
 select:focus {
   border-color: #ff9d00;
 }
-
 
 select option {
   background-color: #1a0f20; 
@@ -138,4 +144,28 @@ select option {
 
 select option:disabled {
   color: #888888;
+}
+
+/* АДАПТИВНОСТЬ: Стили для мобильных устройств (экраны до 600px) */
+@media (max-width: 600px) {
+  .header {
+    flex-direction: column; /* Элементы шапки встают друг под другом */
+    gap: 12px;
+    padding: 15px;
+  }
+
+  .main {
+    padding: 15px; /* Уменьшаем внешние отступы поля */
+  }
+
+  .cell {
+    width: 72px; /* Уменьшаем карточки, чтобы сетка 4х4 влезла в экран смартфона */
+    height: 72px;
+    border-radius: 8px;
+  }
+
+  .img {
+    width: 55px; /* Пропорционально уменьшаем картинку внутри */
+    height: 55px;
+  }
 }
